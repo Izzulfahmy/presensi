@@ -25,13 +25,10 @@
   <iframe id="appFrame" allow="geolocation"></iframe>
 
   <script>
-    // 1. URL dasar Google Apps Script Anda
     const gasUrl = "https://script.google.com/macros/s/AKfycby4XG7X3yglhH9b9RSAYB5lUR5aeQGeNAKd_RXOsXRW6TguZPIwyBQoCMxB5nLj757N/exec";
     
-    // 2. Tangkap parameter / embel-embel dari URL Vercel (contoh: ?vid=XYZ123)
     const urlParams = window.location.search;
     
-    // 3. Gabungkan URL Google Script dengan parameter tersebut, lalu masukkan ke Iframe
     document.getElementById('appFrame').src = gasUrl + urlParams;
   </script>
 
