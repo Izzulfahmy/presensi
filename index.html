@@ -25,18 +25,30 @@
       color: white;
       transition: opacity 0.8s ease, visibility 0.8s ease;
     }
+    
+    /* Pengaturan untuk Logo */
+    .welcome-logo {
+      width: 110px; /* Ukuran logo, bisa Anda sesuaikan */
+      height: auto;
+      margin-bottom: 24px;
+      animation: fadeInUp 0.8s ease-out;
+      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.2)); /* Efek bayangan agar logo lebih menonjol */
+    }
+    
     .welcome-title {
       font-size: 28px; font-weight: 800; margin-bottom: 8px;
-      animation: fadeInUp 0.8s ease-out;
+      animation: fadeInUp 0.8s ease-out 0.1s both; /* Muncul sedikit setelah logo */
     }
     .welcome-subtitle {
       font-size: 14px; font-weight: 500; opacity: 0.9; margin-bottom: 40px;
-      animation: fadeInUp 0.8s ease-out 0.2s both;
+      animation: fadeInUp 0.8s ease-out 0.2s both; /* Muncul sedikit setelah title */
     }
     .spinner {
       width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.2); 
       border-top-color: white; border-radius: 50%;
       animation: spin 1s linear infinite;
+      animation-delay: 0.3s;
+      animation-fill-mode: both;
     }
 
     @keyframes fadeInUp {
@@ -49,15 +61,16 @@
 <body>
   
   <div id="welcome-screen">
+    <img src="logo.png" alt="Logo Instansi" class="welcome-logo">
     <div class="welcome-title">Selamat Datang</div>
-    <div class="welcome-subtitle">Sistem Presensi Digital</div>
+    <div class="welcome-subtitle">Mahasiswa PPG Calon Guru Universitas Jember</div>
     <div class="spinner"></div>
   </div>
 
   <iframe id="appFrame" allow="geolocation"></iframe>
 
   <script>
-    // Pastikan link eksekusi GAS di bawah ini sudah yang paling baru (deploy ulang jika perlu)
+
     const gasUrl = "https://script.google.com/macros/s/AKfycby4XG7X3yglhH9b9RSAYB5lUR5aeQGeNAKd_RXOsXRW6TguZPIwyBQoCMxB5nLj757N/exec";
     const urlParams = window.location.search;
     const iframe = document.getElementById('appFrame');
