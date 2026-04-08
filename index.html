@@ -21,7 +21,7 @@
     #welcome-screen {
       position: absolute; inset: 0; z-index: 50;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* Gradien Biru Keren */
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
       color: white;
       transition: opacity 0.8s ease, visibility 0.8s ease;
     }
@@ -57,21 +57,42 @@
   <iframe id="appFrame" allow="geolocation"></iframe>
 
   <script>
+    // Pastikan link eksekusi GAS di bawah ini sudah yang paling baru (deploy ulang jika perlu)
     const gasUrl = "https://script.google.com/macros/s/AKfycby4XG7X3yglhH9b9RSAYB5lUR5aeQGeNAKd_RXOsXRW6TguZPIwyBQoCMxB5nLj757N/exec";
     const urlParams = window.location.search;
     const iframe = document.getElementById('appFrame');
     const welcomeScreen = document.getElementById('welcome-screen');
+    
+    let isAppReady = false;
 
-    // Menunggu sinyal dari React GAS bahwa UI sudah siap dirender
+    // Fungsi untuk menyembunyikan layar loading
+    function hideWelcomeScreen() {
+      if (!welcomeScreen) return;
+      welcomeScreen.style.opacity = "0";
+      welcomeScreen.style.visibility = "hidden";
+      iframe.style.opacity = "1";
+      setTimeout(() => {
+        if(welcomeScreen.parentNode) welcomeScreen.remove();
+      }, 800);
+    }
+
+    // 1. Menunggu sinyal dari GAS
     window.addEventListener("message", function(event) {
-      if (event.data === "UI_READY") {
-        welcomeScreen.style.opacity = "0";
-        welcomeScreen.style.visibility = "hidden";
-        iframe.style.opacity = "1";
-        setTimeout(() => welcomeScreen.remove(), 800);
+      if (event.data === "UI_READY" || event.data === "APP_READY") {
+        isAppReady = true;
+        hideWelcomeScreen();
       }
     });
 
+    // 2. SAFETY NET: Jika dalam 8 detik GAS tidak mengirim sinyal (mungkin error/koneksi lambat), paksa buka!
+    setTimeout(() => {
+      if (!isAppReady) {
+        console.warn("GAS timeout, memaksakan penutupan layar loading...");
+        hideWelcomeScreen();
+      }
+    }, 8000);
+
+    // Muat Iframe
     iframe.src = gasUrl + urlParams;
   </script>
 </body>
