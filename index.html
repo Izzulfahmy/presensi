@@ -7,30 +7,72 @@
   <link rel="icon" href="logo.png" type="image/png">
   <style>
     body, html { 
-      margin: 0; 
-      padding: 0; 
-      height: 100%; 
-      overflow: hidden; 
-      background-color: #f8fafc; 
+      margin: 0; padding: 0; height: 100%; overflow: hidden; 
+      font-family: system-ui, -apple-system, sans-serif;
+      background-color: #f8fafc;
     }
     iframe { 
-      width: 100%; 
-      height: 100%; 
-      border: none; 
+      width: 100%; height: 100%; border: none; 
+      position: absolute; top: 0; left: 0; z-index: 1;
+      opacity: 0; transition: opacity 0.8s ease-in-out; 
     }
+    
+    /* Layar Selamat Datang */
+    #welcome-screen {
+      position: absolute; inset: 0; z-index: 50;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6); /* Gradien Biru Keren */
+      color: white;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .welcome-title {
+      font-size: 28px; font-weight: 800; margin-bottom: 8px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    .welcome-subtitle {
+      font-size: 14px; font-weight: 500; opacity: 0.9; margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+    .spinner {
+      width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.2); 
+      border-top-color: white; border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   
+  <div id="welcome-screen">
+    <div class="welcome-title">Selamat Datang</div>
+    <div class="welcome-subtitle">Sistem Presensi Digital</div>
+    <div class="spinner"></div>
+  </div>
+
   <iframe id="appFrame" allow="geolocation"></iframe>
 
   <script>
     const gasUrl = "https://script.google.com/macros/s/AKfycby4XG7X3yglhH9b9RSAYB5lUR5aeQGeNAKd_RXOsXRW6TguZPIwyBQoCMxB5nLj757N/exec";
-    
     const urlParams = window.location.search;
-    
-    document.getElementById('appFrame').src = gasUrl + urlParams;
-  </script>
+    const iframe = document.getElementById('appFrame');
+    const welcomeScreen = document.getElementById('welcome-screen');
 
+    // Menunggu sinyal dari React GAS bahwa UI sudah siap dirender
+    window.addEventListener("message", function(event) {
+      if (event.data === "UI_READY") {
+        welcomeScreen.style.opacity = "0";
+        welcomeScreen.style.visibility = "hidden";
+        iframe.style.opacity = "1";
+        setTimeout(() => welcomeScreen.remove(), 800);
+      }
+    });
+
+    iframe.src = gasUrl + urlParams;
+  </script>
 </body>
 </html>
