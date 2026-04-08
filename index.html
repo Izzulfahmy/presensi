@@ -12,63 +12,23 @@
       height: 100%; 
       overflow: hidden; 
       background-color: #f8fafc; 
-      font-family: sans-serif;
     }
     iframe { 
       width: 100%; 
       height: 100%; 
       border: none; 
-      position: relative;
-      z-index: 1;
-    }
-    
-    /* CSS untuk Loader Bawaan */
-    #initial-loader {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background-color: #f8fafc;
-      z-index: 10;
-    }
-    .spinner {
-      width: 45px;
-      height: 45px;
-      border: 4px solid #e2e8f0;
-      border-top-color: #2563eb; /* Warna biru mirip Tailwind */
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .loader-text {
-      margin-top: 15px;
-      font-weight: bold;
-      color: #334155;
-      font-size: 14px;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
     }
   </style>
 </head>
 <body>
   
-  <div id="initial-loader">
-    <div class="spinner"></div>
-    <div class="loader-text">Menghubungkan ke Server...</div>
-  </div>
-
-  <iframe id="appFrame" allow="geolocation" onload="document.getElementById('initial-loader').style.display='none'"></iframe>
+  <iframe id="appFrame" allow="geolocation"></iframe>
 
   <script>
     const gasUrl = "https://script.google.com/macros/s/AKfycby4XG7X3yglhH9b9RSAYB5lUR5aeQGeNAKd_RXOsXRW6TguZPIwyBQoCMxB5nLj757N/exec";
+    
     const urlParams = window.location.search;
+    
     document.getElementById('appFrame').src = gasUrl + urlParams;
   </script>
 
